@@ -1,0 +1,30 @@
+<% var title = 'Sign Up — NoteFlow' %>
+<%- include('partials/header') %>
+
+  <main class="auth-page">
+    <div class="auth-card">
+      <h1>Create your account</h1>
+      <p class="auth-sub">Start capturing ideas in seconds.</p>
+
+      <% if (error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <form action="/signup" method="POST" class="auth-form">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="yourusername" required autofocus>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required minlength="4">
+
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required minlength="4">
+
+        <button type="submit" class="btn btn-primary btn-full">Sign Up</button>
+      </form>
+
+      <p class="auth-switch">Already have an account? <a href="/login">Login</a></p>
+    </div>
+  </main>
+
+<%- include('partials/footer') %>

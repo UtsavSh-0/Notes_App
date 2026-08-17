@@ -1,0 +1,42 @@
+<% var title = 'NoteFlow — Notes, your way' %>
+<%- include('partials/header') %>
+
+  <main class="hero">
+    <div class="hero-content">
+      <h1>Capture ideas your way.</h1>
+      <p class="hero-sub">Type, sketch, or check things off. NoteFlow blends text notes, hand-drawn ink, and to-do lists in one clean app.</p>
+      <div class="hero-actions">
+        <% if (currentUser) { %>
+          <a href="/notes" class="btn btn-primary">Go to My Notes</a>
+        <% } else { %>
+          <a href="/signup" class="btn btn-primary">Get Started Free</a>
+          <a href="/login" class="btn btn-secondary">Login</a>
+        <% } %>
+      </div>
+    </div>
+  </main>
+
+  <section class="features">
+    <div class="feature-card">
+      <div class="feature-icon">✍️</div>
+      <h3>Ink Mode</h3>
+      <p>Draw and sketch freely with your mouse, trackpad, or stylus.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✅</div>
+      <h3>To-Do Integration</h3>
+      <p>Turn any note into a checklist with tappable to-do items.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">•</div>
+      <h3>Bullet Points</h3>
+      <p>Organize thoughts quickly with one-click bullet formatting.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔤</div>
+      <h3>Font Switching</h3>
+      <p>Choose from multiple fonts to match your mood or note style.</p>
+    </div>
+  </section>
+
+<%- include('partials/footer') %>

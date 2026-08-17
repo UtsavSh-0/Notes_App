@@ -1,0 +1,76 @@
+<% var title = 'My Notes — NoteFlow' %>
+<%- include('partials/header') %>
+
+  <main class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <button id="newNoteBtn" class="btn btn-primary btn-full">+ New Note</button>
+
+      <div class="note-type-buttons">
+        <button class="type-btn active" data-type="text">📝 Text</button>
+        <button class="type-btn" data-type="todo">✅ To-Do</button>
+        <button class="type-btn" data-type="ink">✍️ Ink</button>
+      </div>
+
+      <div class="note-list" id="noteList">
+        <!-- Populated by JS -->
+        <p class="empty-hint" id="emptyHint">No notes yet. Create one!</p>
+      </div>
+    </aside>
+
+    <!-- Editor -->
+    <section class="editor-panel" id="editorPanel">
+      <div class="editor-empty" id="editorEmpty">
+        <p>Select a note or create a new one to get started ✨</p>
+      </div>
+
+      <div class="editor-active" id="editorActive" style="display:none;">
+        <div class="editor-toolbar">
+          <input type="text" id="noteTitle" class="note-title-input" placeholder="Note title...">
+
+          <div class="toolbar-group" id="textToolbar">
+            <select id="fontSwitch" title="Font">
+              <option value="sans">Sans (Inter)</option>
+              <option value="serif">Serif (Merriweather)</option>
+              <option value="handwritten">Handwritten (Caveat)</option>
+              <option value="mono">Monospace (JetBrains)</option>
+            </select>
+            <button id="bulletBtn" title="Toggle bullet list">• Bullets</button>
+          </div>
+
+          <div class="toolbar-group" id="inkToolbar" style="display:none;">
+            <label>Color <input type="color" id="inkColor" value="#1f2937"></label>
+            <label>Size <input type="range" id="inkSize" min="1" max="12" value="3"></label>
+            <button id="inkClearBtn">Clear</button>
+          </div>
+
+          <button id="deleteNoteBtn" class="btn-danger" title="Delete note">🗑 Delete</button>
+        </div>
+
+        <!-- Text / bullets editor -->
+        <div id="textEditorWrap" class="editor-body">
+          <div id="textEditor" class="text-editor" contenteditable="true" data-placeholder="Start typing..."></div>
+        </div>
+
+        <!-- To-do editor -->
+        <div id="todoEditorWrap" class="editor-body" style="display:none;">
+          <div class="todo-add-row">
+            <input type="text" id="todoInput" placeholder="Add a to-do item and press Enter...">
+          </div>
+          <ul id="todoList" class="todo-list"></ul>
+        </div>
+
+        <!-- Ink editor -->
+        <div id="inkEditorWrap" class="editor-body" style="display:none;">
+          <canvas id="inkCanvas" class="ink-canvas"></canvas>
+        </div>
+
+        <div class="editor-footer">
+          <span id="saveStatus" class="save-status">Saved</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/notes.js"></script>
+<%- include('partials/footer') %>

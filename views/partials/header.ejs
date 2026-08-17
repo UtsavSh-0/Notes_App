@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Notes App' %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@500;700&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="brand">📝 NoteFlow</a>
+    <div class="nav-links">
+      <% if (currentUser) { %>
+        <a href="/notes">My Notes</a>
+        <span class="nav-user">Hi, <%= currentUser.username %></span>
+        <form action="/logout" method="POST" class="inline-form">
+          <button type="submit" class="btn-link">Logout</button>
+        </form>
+      <% } else { %>
+        <a href="/login">Login</a>
+        <a href="/signup" class="btn-nav">Sign Up</a>
+      <% } %>
+    </div>
+  </nav>
