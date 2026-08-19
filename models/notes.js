@@ -1,0 +1,59 @@
+const mongoose=require("mongoose");
+
+const noteSchema=new mongoose.Schema(
+    {
+        title:{
+            type:String,
+            required:true,
+            trim:true,
+        },
+        type:{
+            type:String,
+            enum:["text","todo","ink"],
+            default:"text",
+        },
+        content:{
+            type:String,
+            default:"",
+        },
+        font:{
+            type:String,
+            default:"sans",
+        },
+        color:{
+            type:String,
+            default:"#ffffff"
+        },
+        isPinned:{
+            type:Boolean,
+            default:false,
+        },
+        todos:[
+            {
+                text:{
+                    type:String,
+                    required:true,
+                },
+                completed:{
+                    type:Boolean,
+                    default:false,
+                },
+            },
+        ],
+        inkData:{
+            type:String,
+            default:"",
+        },
+        user:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User",
+            required:true,
+        },
+    },
+    {
+        timestamps:true,
+    }
+);
+
+const Note=mongoose.model("Note",noteSchema);
+module.exports=Note;

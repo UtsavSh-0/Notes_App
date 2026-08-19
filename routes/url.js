@@ -2,9 +2,23 @@ const express=require("express");
 const router=express.Router();
 
 const{
-//
-}=require("../controllers/url");
+createNote,
+getNotes,
+}=require("../controllers/notes");
 
-router.post("/",);
+const {
+    restrictToLoggedinUserOnly,
+}=require("../middlewares/auth");
+
+
+router.post("/",
+    restrictToLoggedinUserOnly,
+    createNote
+);
+
+router.get(
+  "/",restrictToLoggedinUserOnly,
+  getNotes  
+);
 
 module.exports=router;

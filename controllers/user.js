@@ -1,31 +1,80 @@
-const {v4:uuidv4}=require('uuid')
-const User=require("../models/user");
-const {setUser}=require('../services/auth')
-async function handleUserSignup(req,res){
-    const {name,email,password}=req.body;
-    await User.create({
-        name,
-        email,
-        password,
-    });
-    return res.redirect("/");
+const User = require("../models/user");
+const { randomUUID } = require("crypto");
+const { setUser } = require("../services/auth");
+
+async function handleUserSignup(req, res) {
+    try {
+        const { username, password, confirmPassword } = req.body;
+
+        if (!username || !password || !confirmPassword) {
+            return res.render("signup", {
+                error: "All fields are required",
+            });
+        }
+
+        if (password !== confirmPassword) {
+            return res.render("signup", {
+                error: "Passwords do not match",
+            });
+        }
+
+        const existingUser = await User.findOne({ username });
+
+        if (existingUser) {
+            return res.render("signup", {
+                error: "Username already exists",
+            });
+        }
+
+        await User.create({
+            username,
+            password,
+        });
+
+        return res.redirect("/login");
+
+    } catch (error) {
+        console.log(error);
+
+        return res.render("signup", {
+            error: "Something went wrong. Please try again.",
+        });
+    }
 }
-async function handleUserLogin(req,res){
-    const {email,password}=req.body;
-    await User.findOne({
-        email,
-        password,
-    });
-    if(!user)return res.render("login",{
-        error:"Invalid Username or Password",
-    });
-    
-    const sessionId=uuidv4();
-    setUser(sessionId,user);
-    res.cookie('uid',sessionId);
-    return res.redirect("/");
+
+async function handleUserLogin(req, res) {
+    try {
+        const { username, password } = req.body;
+
+        const user = await User.findOne({
+            username,
+            password,
+        });
+
+        if (!user) {
+            return res.render("login", {
+                error: "Invalid username or password",
+            });
+        }
+
+        const sessionId = randomUUID();
+
+        setUser(sessionId, user);
+
+        res.cookie("uid", sessionId);
+
+        return res.redirect("/notes");
+
+    } catch (error) {
+        console.log(error);
+
+        return res.render("login", {
+            error: "Something went wrong. Please try again",
+        });
+    }
 }
-module.exports={
-    handleUserLogin,
+
+module.exports = {
     handleUserSignup,
+    handleUserLogin,
 };
