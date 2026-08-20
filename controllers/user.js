@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const { randomUUID } = require("crypto");
 const { setUser } = require("../services/auth");
+const bcrypt = require("bcrypt");
 
 async function handleUserSignup(req, res) {
     try {
@@ -26,15 +27,18 @@ async function handleUserSignup(req, res) {
             });
         }
 
+        // Hash password before saving
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         await User.create({
             username,
-            password,
+            password: hashedPassword,
         });
 
         return res.redirect("/login");
 
     } catch (error) {
-        console.log(error);
+        console.log("SIGNUP ERROR:", error);
 
         return res.render("signup", {
             error: "Something went wrong. Please try again.",
@@ -42,14 +46,13 @@ async function handleUserSignup(req, res) {
     }
 }
 
+
 async function handleUserLogin(req, res) {
     try {
         const { username, password } = req.body;
 
-        const user = await User.findOne({
-            username,
-            password,
-        });
+        // Find user by username
+        const user = await User.findOne({ username });
 
         if (!user) {
             return res.render("login", {
@@ -57,6 +60,19 @@ async function handleUserLogin(req, res) {
             });
         }
 
+        // Compare entered password with hashed password
+        const passwordMatch = await bcrypt.compare(
+            password,
+            user.password
+        );
+
+        if (!passwordMatch) {
+            return res.render("login", {
+                error: "Invalid username or password",
+            });
+        }
+
+        // Create login session
         const sessionId = randomUUID();
 
         setUser(sessionId, user);
@@ -66,7 +82,7 @@ async function handleUserLogin(req, res) {
         return res.redirect("/notes");
 
     } catch (error) {
-        console.log(error);
+        console.log("LOGIN ERROR:", error);
 
         return res.render("login", {
             error: "Something went wrong. Please try again",
@@ -74,7 +90,16 @@ async function handleUserLogin(req, res) {
     }
 }
 
+
+function handleUserLogout(req, res) {
+    res.clearCookie("uid");
+
+    return res.redirect("/");
+}
+
+
 module.exports = {
     handleUserSignup,
     handleUserLogin,
+    handleUserLogout,
 };

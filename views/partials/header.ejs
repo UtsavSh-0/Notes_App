@@ -10,17 +10,37 @@
 </head>
 <body>
   <nav class="navbar">
-    <a href="/" class="brand">📝 NoteFlow</a>
+    <a href="/" class="logo">NoteFlow</a>
+
     <div class="nav-links">
+
       <% if (currentUser) { %>
-        <a href="/notes">My Notes</a>
-        <span class="nav-user">Hi, <%= currentUser.username %></span>
-        <form action="/logout" method="POST" class="inline-form">
-          <button type="submit" class="btn-link">Logout</button>
-        </form>
-      <% } else { %>
-        <a href="/login">Login</a>
-        <a href="/signup" class="btn-nav">Sign Up</a>
-      <% } %>
+
+    <p class="welcome-text">
+        Welcome back, <strong><%= currentUser.username %></strong> 👋
+    </p>
+
+    <div class="hero-actions">
+        <a href="/notes" class="btn btn-primary">
+            Go to My Notes
+        </a>
+        <a href="/logout">Logout</a>
+    </div>
+
+<% } else { %>
+
+    <div class="hero-actions">
+        <a href="/signup" class="btn btn-primary">
+            Get Started Free
+        </a>
+
+        <a href="/login" class="btn btn-secondary">
+            Login
+        </a>
+    </div>
+
+<% } %>
+              
+   
     </div>
   </nav>

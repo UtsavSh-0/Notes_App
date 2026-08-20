@@ -33,7 +33,83 @@ async function createNote(req,res){
             });
         }
     }
+    async function getNotesById(req,res){
+        try{
+            const note=await Note.findOne({
+                _id:req.params.id,
+                user:req.user._id
+            });
+            if(!note){
+                return res.status(404).json({
+                    error:"Note not found"
+                });
+            }
+            return res.json(note);
+        }catch(error){
+            console.log("GET NOTE ERROR:",error);
+            return res.status(500).json({
+                error:"Failed to get note"
+            });
+        }
+    }
+    async function updateNote(req,res){
+        try{
+            const {title,content,font,color}=req.body;
+            const note=await Note.findOneAndUpdate(
+                {
+                    _id:req.params.id,
+                    user:req.user._id
+                },
+                {
+                    title,
+                    content,
+                    font,
+                    color
+                },
+                {
+                    new:true,
+                    runValidators:true
+                }
+            );
+            if(!note){
+                return res.status(404).json({
+                    error:"Note not found"
+                });
+            }
+            return res.json(note);
+        }catch(error){
+            console.log("UPDATE NOTE ERROR:",error);
+            return res.status(500).json({
+                error:"Failed to update note"
+            });
+        }
+    }
+
+    async function deleteNote(req,res){
+        try{
+            const note=await Note.findOneAndDelete({
+                _id:req.params.id,
+                user:req.user._id
+            });
+            if(!note){
+                return res.status(404).json({
+                    error:"Note note found"
+                });
+            }
+            return res.json({
+                message:"Note deleted successfully"
+            });
+        }catch(error){
+            console.log("Delete note error: ",error);
+            return res.status(500).json({
+                error:"Failed to delete note"
+            });
+        }
+    }
 module.exports={
     createNote,
     getNotes,
+    getNotesById,
+    updateNote,
+    deleteNote,
 };

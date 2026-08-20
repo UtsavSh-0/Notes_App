@@ -21,11 +21,15 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
 
+const {getUser}=require("./services/auth");
 app.use((req,res,next)=>{
-    res.locals.currentUser=null;
+    const userUid=req.cookies?.uid;
+    const user=userUid? getUser(userUid):null;
+    req.user=user || null;
+    res.locals.currentUser=user || null;
     next();
-});
-
+})
+app.use(cookieParser());
 app.use("/",staticRoute);
 app.use("/",userRoute);
 app.use("/api/notes",notesRoute);
